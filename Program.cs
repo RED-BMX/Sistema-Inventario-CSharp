@@ -1,4 +1,4 @@
-﻿Inventario inventario = new Inventario();
+﻿Inventario inventario = new Inventario(new PersistenciaJson());
 
 Menu menu = new Menu(inventario);
 
