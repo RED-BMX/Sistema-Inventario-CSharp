@@ -5,3 +5,4 @@ obj/
 *.user
 *.suo
 productos.json
+inventario.db

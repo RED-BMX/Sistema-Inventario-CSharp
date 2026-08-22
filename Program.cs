@@ -1,4 +1,4 @@
-﻿Inventario inventario = new Inventario(new PersistenciaJson());
+﻿Inventario inventario = new Inventario(new PersistenciaSQLite());
 
 Menu menu = new Menu(inventario);
 

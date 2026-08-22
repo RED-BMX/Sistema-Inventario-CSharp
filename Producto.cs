@@ -5,6 +5,11 @@ public class Producto
     public decimal Precio { get; private set; }
     public int Stock { get; private set; }
 
+    private Producto()
+    {
+        Nombre = string.Empty;
+    }
+
     public Producto(int id, string nombre, decimal precio, int stock)
     {
         if (id <= 0)
