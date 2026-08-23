@@ -1,4 +1,5 @@
-
+using Sistema_Inventario_CSharp.Application;
+using Sistema_Inventario_CSharp.Domain;
 using System.Collections.Generic;
 using System.Linq;
 using Sistema_Inventario_CSharp;

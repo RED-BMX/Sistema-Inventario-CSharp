@@ -1,3 +1,5 @@
+namespace Sistema_Inventario_CSharp.Domain;
+
 public class Producto
 {
     public int Id { get; private set; }

@@ -1,3 +1,7 @@
+using Sistema_Inventario_CSharp.Domain;
+
+namespace Sistema_Inventario_CSharp.Application;
+
 public class Inventario
 {
     private readonly List<Producto> productos = new();
