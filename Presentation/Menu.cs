@@ -1,3 +1,8 @@
+using Sistema_Inventario_CSharp.Application;
+using Sistema_Inventario_CSharp.Domain;
+
+namespace Sistema_Inventario_CSharp.Presentation;
+
 public class Menu
 {
     private Inventario inventario;
