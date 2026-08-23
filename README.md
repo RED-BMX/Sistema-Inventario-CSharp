@@ -2,7 +2,7 @@
 
 Aplicación de consola desarrollada en **C# y .NET 8** para gestionar productos y controlar el inventario.
 
-Este proyecto forma parte de mi portafolio de desarrollo de software y tiene como objetivo demostrar conocimientos en **programación orientada a objetos, colecciones, LINQ, persistencia de datos, pruebas unitarias, Entity Framework Core, Git y buenas prácticas de desarrollo**.
+Este proyecto forma parte de mi portafolio de desarrollo de software y tiene como objetivo demostrar conocimientos en **programación orientada a objetos, colecciones, LINQ, persistencia de datos, pruebas unitarias, Entity Framework Core, arquitectura por capas, Git y buenas prácticas de desarrollo**.
 
 ## Características
 
@@ -33,6 +33,81 @@ Este proyecto forma parte de mi portafolio de desarrollo de software y tiene com
 * **Git**
 * **GitHub**
 
+## Arquitectura
+
+El proyecto utiliza una estructura básica de **arquitectura por capas**, separando las responsabilidades principales del sistema.
+
+```text
+Presentation
+      ↓
+Application
+      ↓
+   Domain
+
+Application
+      ↓
+IPersistencia
+      ↑
+Infrastructure
+```
+
+### Domain
+
+Contiene las entidades y reglas fundamentales del dominio.
+
+```text
+Domain/
+└── Producto.cs
+```
+
+`Producto` representa un producto del inventario y contiene las reglas relacionadas con sus datos y operaciones de stock.
+
+### Application
+
+Contiene la lógica principal del sistema y los contratos necesarios para la persistencia.
+
+```text
+Application/
+├── Inventario.cs
+└── IPersistencia.cs
+```
+
+`Inventario` gestiona las operaciones principales sobre los productos.
+
+`IPersistencia` define el contrato que deben implementar los diferentes mecanismos de almacenamiento.
+
+### Infrastructure
+
+Contiene las implementaciones concretas relacionadas con la persistencia de datos.
+
+```text
+Infrastructure/
+├── InventarioDbContext.cs
+├── PersistenciaJson.cs
+└── PersistenciaSQLite.cs
+```
+
+Actualmente existen dos mecanismos de persistencia:
+
+* `PersistenciaJson`: almacena los productos en `productos.json`.
+* `PersistenciaSQLite`: almacena los productos en una base de datos SQLite mediante Entity Framework Core.
+
+Gracias a `IPersistencia`, la lógica principal del inventario no depende directamente de una implementación concreta de almacenamiento.
+
+### Presentation
+
+Contiene la interacción con el usuario y el punto de entrada de la aplicación.
+
+```text
+Presentation/
+├── Menu.cs
+└── Program.cs
+```
+
+`Menu` gestiona las opciones disponibles desde la consola.
+
+`Program` configura la aplicación e inicia el sistema.
+
 ## Persistencia de datos
 
 El sistema utiliza la interfaz `IPersistencia` para abstraer el mecanismo utilizado para guardar y cargar los productos.
@@ -52,7 +127,7 @@ El proyecto incluye un proyecto independiente de pruebas:
 Sistema-Inventario-CSharp.Tests/
 ```
 
-Las pruebas utilizan **xUnit** y una implementación `FakePersistencia` para probar la lógica del inventario sin modificar los archivos reales de persistencia.
+Las pruebas utilizan **xUnit** y una implementación `FakePersistencia` para probar la lógica del inventario sin depender directamente de SQLite o de archivos reales de persistencia.
 
 Actualmente existen **12 pruebas unitarias**, que cubren operaciones como:
 
@@ -83,55 +158,56 @@ Resultado actual:
 
 ## Ejecución del proyecto
 
-Para compilar el proyecto:
+### Compilar
 
 ```bash
 dotnet build
 ```
 
-Para ejecutar la aplicación:
+### Ejecutar
 
 ```bash
 dotnet run
+```
+
+### Ejecutar las pruebas
+
+```bash
+dotnet test Sistema-Inventario-CSharp.Tests
 ```
 
 ## Estructura del proyecto
 
 ```text
 Sistema-Inventario-CSharp/
-├── Producto.cs
-├── Inventario.cs
-├── IPersistencia.cs
-├── PersistenciaJson.cs
-├── PersistenciaSQLite.cs
-├── InventarioDbContext.cs
-├── Menu.cs
-├── Program.cs
-├── productos.json
+├── Domain/
+│   └── Producto.cs
+│
+├── Application/
+│   ├── Inventario.cs
+│   └── IPersistencia.cs
+│
+├── Infrastructure/
+│   ├── InventarioDbContext.cs
+│   ├── PersistenciaJson.cs
+│   └── PersistenciaSQLite.cs
+│
+├── Presentation/
+│   ├── Menu.cs
+│   └── Program.cs
+│
 ├── Sistema-Inventario-CSharp.Tests/
 │   ├── FakePersistencia.cs
 │   ├── GlobalUsings.cs
 │   ├── Sistema-Inventario-CSharp.Tests.csproj
 │   └── UnitTest1.cs
+│
+├── productos.json
+├── inventario.db
 ├── README.md
 ├── .gitignore
 └── Sistema-Inventario-CSharp.csproj
 ```
-
-## Arquitectura actual
-
-El proyecto utiliza una separación básica de responsabilidades:
-
-* `Producto`: representa la entidad producto y contiene las reglas relacionadas con sus datos y stock.
-* `Inventario`: contiene la lógica principal para gestionar los productos.
-* `IPersistencia`: define el contrato para guardar y cargar productos.
-* `PersistenciaJson`: implementación de persistencia mediante JSON.
-* `PersistenciaSQLite`: implementación de persistencia mediante SQLite.
-* `InventarioDbContext`: contexto de Entity Framework Core para SQLite.
-* `Menu`: gestiona la interacción con el usuario desde la consola.
-* `Program`: configura e inicia la aplicación.
-
-La utilización de `IPersistencia` permite desacoplar la lógica del inventario del mecanismo concreto de almacenamiento.
 
 ## Control de versiones
 
@@ -144,21 +220,45 @@ Ejemplos de funcionalidades desarrolladas:
 * `feature/json-persistence`
 * `feature/unit-tests`
 * `feature/sqlite-persistence`
+* `feature/layered-architecture`
 
-Este flujo permite mantener un historial de desarrollo organizado y facilita la revisión de cambios.
+Este flujo permite mantener un historial de desarrollo organizado, separar funcionalidades y facilitar la revisión de cambios.
+
+## Buenas prácticas aplicadas
+
+Durante el desarrollo se aplicaron diferentes prácticas de desarrollo de software:
+
+* Programación orientada a objetos.
+* Encapsulamiento.
+* Separación de responsabilidades.
+* Arquitectura por capas.
+* Abstracción mediante interfaces.
+* Inyección de dependencias.
+* Validación de datos.
+* Persistencia desacoplada.
+* Pruebas unitarias.
+* Uso de LINQ.
+* Control de versiones con Git.
+* Desarrollo mediante ramas.
+* Integración mediante Pull Requests.
+* Documentación del proyecto.
 
 ## Estado del proyecto
 
-Actualmente el sistema cuenta con:
+El proyecto se encuentra en un estado **funcional y estable**.
+
+Actualmente cuenta con:
 
 * Gestión básica de productos.
 * Validaciones de datos.
 * Persistencia JSON.
 * Persistencia SQLite.
 * Entity Framework Core.
+* Arquitectura organizada por capas.
 * Pruebas unitarias con xUnit.
-* 12 pruebas automatizadas.
+* **12 pruebas automatizadas.**
 * Control de versiones con Git.
-* Integración mediante Pull Requests en GitHub.
+* Desarrollo mediante ramas y Pull Requests.
+* Integración de cambios mediante Pull Requests en GitHub.
 
-El siguiente objetivo del proyecto es continuar evolucionando la arquitectura y posteriormente convertir la lógica del sistema en una **API REST con ASP.NET Core**.
+El proyecto cumple su objetivo como una aplicación de consola orientada a demostrar fundamentos de desarrollo de software, programación orientada a objetos, persistencia de datos, pruebas automatizadas, arquitectura por capas y buenas prácticas de control de versiones.
